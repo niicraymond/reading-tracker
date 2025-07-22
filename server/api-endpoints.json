@@ -1,0 +1,23 @@
+{
+    "POST /api/auth/login": {
+        "description": "Authenticate user and return JWT",
+        "request": {"email": "string", "password": "string"},
+        "response": {
+            "token": "string",
+            "user": {"id": "number", "email": "string", "name": "string"}
+        }
+    },
+    "GET /api/library": {
+        "description": "Get all books in the user's library",
+        "headers": {"Authorization": "Bearer <token>"},
+        "response": [
+            {
+                "bookId": "string",
+                "title": "string",
+                "authors": ["string"],
+                "pages": "number",
+                "genre": "string"
+            }
+        ]
+    }
+}
