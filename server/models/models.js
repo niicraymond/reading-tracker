@@ -1,4 +1,5 @@
 const pool = require("../connection");
+const axios = require("axios");
 
 async function getLibrary(userId) {
   const result = await pool.query(
@@ -21,4 +22,11 @@ async function addBookToLibrary(userId, bookId) {
   );
 }
 
-module.exports = { getLibrary, addBookToLibrary };
+async function searchGoogleBooks(query) {
+  const res = await axios.get("https://www.googleapis.com/books/v1/volumes", {
+    params: { q: query, maxResults: 10 },
+  });
+  return res.data.items || [];
+}
+
+module.exports = { getLibrary, addBookToLibrary, searchGoogleBooks };
