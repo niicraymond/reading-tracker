@@ -12,4 +12,13 @@ async function getLibrary(userId) {
   return result.rows;
 }
 
-module.exports = getLibrary;
+async function addBookToLibrary(userId, bookId) {
+  await pool.query(
+    `INSERT INTO user_library (user_id, book_id)
+    VALUES ($1, $2)
+    ON CONFLICT DO NOTHING`,
+    [userId, bookId]
+  );
+}
+
+module.exports = { getLibrary, addBookToLibrary };

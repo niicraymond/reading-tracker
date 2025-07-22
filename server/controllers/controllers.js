@@ -1,4 +1,4 @@
-const getLibrary = require("../models/models");
+const {getLibrary, addBookToLibrary} = require("../models/models");
 
 async function fetchLibrary(req, res) {
   const userId = req.userId;
@@ -6,4 +6,12 @@ async function fetchLibrary(req, res) {
   res.json(books);
 }
 
-module.exports = fetchLibrary;
+async function addToLibrary(req, res) {
+  const userId = req.userId
+  const {bookId} = req.body
+  if (!bookId) return res.status(400).json({error: 'BookId required'})
+  await addBookToLibrary(userId, bookId)
+  res.status(201).json({message: 'Book added'})
+}
+
+module.exports = {fetchLibrary, addToLibrary};
