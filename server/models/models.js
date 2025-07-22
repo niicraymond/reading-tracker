@@ -12,4 +12,4 @@ async function getLibrary(userId) {
   return result.rows;
 }
 
-module.exports = { getLibrary };
+module.exports = getLibrary;

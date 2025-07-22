@@ -7,4 +7,4 @@ async function getUserByEmail(email) {
   return result.rows[0];
 }
 
-module.exports = { getUserByEmail };
+module.exports = getUserByEmail;

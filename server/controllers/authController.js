@@ -1,4 +1,4 @@
-const { getUserByEmail } = require("../models/userModel");
+const getUserByEmail = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -25,4 +25,4 @@ async function login(req, res) {
   });
 }
 
-module.exports = { login };
+module.exports = login;
