@@ -1,7 +1,6 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const pool = require('./connection')
 
 const app = express()
 app.use(cors())
