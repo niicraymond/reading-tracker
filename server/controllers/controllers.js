@@ -2,6 +2,8 @@ const {
   getLibrary,
   addBookToLibrary,
   searchGoogleBooks,
+  getBookList,
+  upsertBookListEntry
 } = require("../models/models");
 
 async function fetchLibrary(req, res) {
@@ -31,4 +33,21 @@ async function searchBooks(req, res) {
   }));
   res.json(books);
 }
-module.exports = { fetchLibrary, addToLibrary, searchBooks };
+
+async function fetchBookList(req, res){
+  const userId = req.userId
+  const list = await getBookList(userId)
+  res.json(list)
+}
+
+async function updateBookList(req, res) {
+  const userId = req.userId
+  const {bookId, status_tag, rating} = req.body
+  if (!bookId){
+    return res.status(400).json({error: 'bookId, status_tag and rating required'})
+  }
+  await upsertBookListEntry(userId, bookId, status_tag, rating)
+  res.status(200).json({message: 'Booklist updated'})
+}
+
+module.exports = { fetchLibrary, addToLibrary, searchBooks, fetchBookList, updateBookList };

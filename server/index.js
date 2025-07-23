@@ -7,6 +7,8 @@ const {
   fetchLibrary,
   addToLibrary,
   searchBooks,
+  fetchBookList,
+  updateBookList
 } = require("./controllers/controllers");
 
 const app = express();
@@ -17,6 +19,8 @@ app.post("/api/auth/login", login);
 app.get("/api/library", authenticate, fetchLibrary);
 app.post("/api/library", authenticate, addToLibrary);
 app.get("/api/search", searchBooks);
+app.get('/api/booklist', authenticate, fetchBookList)
+app.post('/api/booklist', authenticate, updateBookList)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
