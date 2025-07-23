@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Login from './components/Login'
 import Search from './components/Search';
+import Library from './components/Library';
 import './App.css'
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         </header>
         <main>
           <Search/>
+          <Library/>
         </main>
       </div>
   )
