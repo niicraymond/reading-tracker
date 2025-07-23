@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import Login from './components/Login'
+import Search from './components/Search';
 import './App.css'
 
 function App() {
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
+  const [user, setUser] = useState({ id: 2, name: 'Test User' });
 
   function handleLogin(userData){
     setUser(userData)
@@ -15,7 +17,12 @@ function App() {
   }
 
   if (!user) {
-    return <Login onLogin={handleLogin}/>
+    return (
+      <div>
+      <h1>Log In</h1>
+      <Login onLogin={handleLogin}/>
+      </div>
+    )
   }
 
   return (
@@ -25,7 +32,7 @@ function App() {
           <button onClick={handleLogout}>Logout</button>
         </header>
         <main>
-          <p>more stuff goes here</p>
+          <Search/>
         </main>
       </div>
   )
