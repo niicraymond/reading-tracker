@@ -29,4 +29,26 @@ async function searchGoogleBooks(query) {
   return res.data.items || [];
 }
 
-module.exports = { getLibrary, addBookToLibrary, searchGoogleBooks };
+async function getBookList(userId){
+  const result = await pool.query(
+    `SELECT books.*, user_booklist.status_tag, user_booklist.rating
+    FROM books
+    JOIN user_booklist
+      ON books.id = user_booklist.book_id
+      WHERE user_booklist.user_id = $1`, [userId]
+  )
+  return result.rows
+}
+
+async function upsertBookListEntry(userId, bookId, status, rating) {
+  await pool.query(
+    `INSERT INTO user_booklist (user_id, book_id, status_tag, rating)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (user_id, book_id)
+    DO UPDATE SET
+    status_tag = EXCLUDED.status_tag,
+    rating = EXCLUDED.rating`, [userId, bookId, status, rating]
+  )
+}
+
+module.exports = { getLibrary, addBookToLibrary, searchGoogleBooks, getBookList, upsertBookListEntry };
