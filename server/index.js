@@ -6,6 +6,7 @@ const {
   searchBooks,
   fetchBookList,
   updateBookList,
+  removeFromLibrary
 } = require("./controllers/controllers");
 
 require("dotenv").config();
@@ -22,6 +23,7 @@ app.post("/api/library", authenticate, addToLibrary);
 app.get("/api/search", searchBooks);
 app.get("/api/booklist", authenticate, fetchBookList);
 app.post("/api/booklist", authenticate, updateBookList);
+app.delete('/api/library/:bookId', authenticate, removeFromLibrary);
 
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;

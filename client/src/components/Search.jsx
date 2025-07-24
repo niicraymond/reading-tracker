@@ -20,7 +20,13 @@ export default function Search() {
 
   async function handleAdd(book) {
     try {
-      await api.post("/library", { bookId: book.id });
+      await api.post("/library", { 
+        google_book_id: book.google_book_id,
+        title: book.title, 
+        authors: book.authors,
+        page_count: book.page_count,
+        genre: book.genre
+     });
       alert(`Added "${book.title}"`);
     } catch {
       alert("Add failed");

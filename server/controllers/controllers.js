@@ -3,7 +3,8 @@ const {
   addBookToLibrary,
   searchGoogleBooks,
   getBookList,
-  upsertBookListEntry
+  upsertBookListEntry,
+  removeBookFromLibrary
 } = require("../models/models");
 
 async function fetchLibrary(req, res) {
@@ -14,10 +15,10 @@ async function fetchLibrary(req, res) {
 
 async function addToLibrary(req, res) {
   const userId = req.userId;
-  const { bookId } = req.body;
-  if (!bookId) return res.status(400).json({ error: "BookId required" });
-  await addBookToLibrary(userId, bookId);
-  res.status(201).json({ message: "Book added" });
+  const { google_book_id, title, authors, page_count, genre } = req.body;
+  if (!google_book_id) return res.status(400).json({ error: 'Book data required' });
+  await addBookToLibrary(userId, google_book_id, title, authors, page_count, genre);
+  res.status(201).json({ message: 'Book added' });
 }
 
 async function searchBooks(req, res) {
@@ -50,4 +51,10 @@ async function updateBookList(req, res) {
   res.status(200).json({message: 'Booklist updated'})
 }
 
-module.exports = { fetchLibrary, addToLibrary, searchBooks, fetchBookList, updateBookList };
+async function removeFromLibrary(req, res) {
+  const userId = req.userId;
+  const { bookId } = req.params;
+  await removeBookFromLibrary(userId, bookId);
+  res.json({ message: 'Book removed' });
+}
+module.exports = { fetchLibrary, addToLibrary, searchBooks, fetchBookList, updateBookList, removeFromLibrary };
