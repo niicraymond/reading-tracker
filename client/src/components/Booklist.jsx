@@ -40,15 +40,16 @@ export default function Booklist() {
   }
 
   return (
-    <ul>
+    <ul className="divide-y divide-gray-300 p-4">
       {list.map((b) => (
-        <li key={b.id}>
-          <div>{b.title}</div>
-          <div>{b.authors.join(", ")}</div>
-          <div>
+        <li key={b.id} className="flex items-center justify-between py-3">
+          <div className="font-medium">{b.title}</div>
+          <div className="text-sm text-gray-600">{b.authors.join(", ")}</div>
+          <div className="flex items-center space-x-4">
             <select
               value={b.status_tag}
               onChange={(e) => handleUpdate(b.id, e.target.value, b.rating)}
+              className="p-1 border rounded"
             >
               <option value="reading">Reading</option>
               <option value="finished">Finished</option>
@@ -67,6 +68,7 @@ export default function Booklist() {
                   e.target.value ? Number(e.target.value) : null
                 )
               }
+              className="w-16 p-1 border rounded text-center"
             />
           </div>
         </li>
