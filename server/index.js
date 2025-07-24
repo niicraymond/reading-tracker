@@ -1,6 +1,3 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
 const login = require("./controllers/authController");
 const authenticate = require("./middleware/auth");
 const {
@@ -8,8 +5,12 @@ const {
   addToLibrary,
   searchBooks,
   fetchBookList,
-  updateBookList
+  updateBookList,
 } = require("./controllers/controllers");
+
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 app.use(cors());
@@ -19,10 +20,14 @@ app.post("/api/auth/login", login);
 app.get("/api/library", authenticate, fetchLibrary);
 app.post("/api/library", authenticate, addToLibrary);
 app.get("/api/search", searchBooks);
-app.get('/api/booklist', authenticate, fetchBookList)
-app.post('/api/booklist', authenticate, updateBookList)
+app.get("/api/booklist", authenticate, fetchBookList);
+app.post("/api/booklist", authenticate, updateBookList);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`listening on ${PORT}`);
-});
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`listening on ${PORT}`);
+  });
+}
+
+module.exports = app;
