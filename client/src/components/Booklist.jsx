@@ -5,6 +5,15 @@ export default function Booklist() {
   const [list, setList] = useState([]);
   const [error, setError] = useState("");
 
+  async function handleRemoveFromBooklist(bookId) {
+    try {
+      await api.delete(`/booklist/${bookId}`);
+      setList(list.filter((item) => item.id !== bookId));
+    } catch {
+      alert("Failed to return to library");
+    }
+  }
+
   useEffect(() => {
     async function loadBookList() {
       try {
@@ -36,7 +45,7 @@ export default function Booklist() {
   }
 
   if (list.length === 0) {
-    return <div>Your booklist is empty.</div>;
+    return <div>Your bookbag is empty.</div>;
   }
 
   return (
@@ -71,6 +80,12 @@ export default function Booklist() {
               className="w-16 p-1 border rounded text-center"
             />
           </div>
+          <button
+            onClick={() => handleRemoveFromBooklist(b.id)}
+            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Return to Library
+          </button>
         </li>
       ))}
     </ul>

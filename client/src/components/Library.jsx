@@ -5,6 +5,15 @@ export default function Library() {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState("");
 
+  async function handleRemoveFromLibrary(bookId) {
+    try {
+      await api.delete(`/library/${bookId}`);
+      setBooks(books.filter((b) => b.id !== bookId));
+    } catch {
+      alert("Remove from library failed");
+    }
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -34,6 +43,29 @@ export default function Library() {
           <div className="flex justify-between text-sm text-gray-700">
             <span>Genre: {book.genre || "—"}</span>
             <span>Pages: {book.page_count || "—"}</span>
+          </div>
+          <div className="mt-4 flex gap-2">
+          <button 
+            onClick={() =>
+              api
+                .post("/booklist", {
+                  bookId: book.id,
+                  status_tag: "reading",
+                  rating: null,
+                })
+                .then(() => alert(`"${book.title}" added to Booklist`))
+                .catch(() => alert("Add to Booklist failed"))
+            }
+            className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Add to Bookbag
+          </button>
+          <button
+            onClick={() => handleRemoveFromLibrary(book.id)}
+            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Remove
+          </button>
           </div>
         </li>
       ))}

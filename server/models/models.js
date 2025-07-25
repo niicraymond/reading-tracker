@@ -21,7 +21,7 @@ async function addBookToLibrary(
   pageCount,
   genre
 ) {
-  const {rows} = await pool.query(
+  const { rows } = await pool.query(
     `INSERT INTO books
        (google_book_id, title, authors, page_count, genre)
      VALUES ($1,$2,$3,$4,$5)
@@ -73,15 +73,22 @@ async function upsertBookListEntry(userId, bookId, status, rating) {
     rating = EXCLUDED.rating`,
     [userId, bookId, status, rating]
   );
+}
 
-  async function removeBookFromLibrary(userId, bookId) {
-    await pool.query(
-      `DELETE FROM user_library
-        WHERE user_id = $1 AND book_id = $2`,
-      [userId, bookId]
-    );
-  }
-  
+async function removeBookFromBooklist(userId, bookId) {
+  await pool.query(
+    `DELETE FROM user_booklist
+       WHERE user_id = $1 AND book_id = $2`,
+    [userId, bookId]
+  );
+}
+
+async function removeBookFromLibrary(userId, bookId) {
+  await pool.query(
+    `DELETE FROM user_library
+      WHERE user_id = $1 AND book_id = $2`,
+    [userId, bookId]
+  );
 }
 
 module.exports = {
@@ -90,5 +97,6 @@ module.exports = {
   searchGoogleBooks,
   getBookList,
   upsertBookListEntry,
-  removeBookFromLibrary
+  removeBookFromLibrary,
+  removeBookFromBooklist,
 };

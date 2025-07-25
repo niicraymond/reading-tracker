@@ -8,6 +8,12 @@ function App() {
   const [user, setUser] = useState(null);
   const [view, setView] = useState("search");
 
+  const tabs = [
+    { key: "search",   label: "Search Books" },
+    { key: "library",  label: "My Library" },
+    { key: "booklist", label: "My Bookbag" },
+  ];
+
   function handleLogin(userData) {
     setUser(userData);
   }
@@ -34,13 +40,13 @@ function App() {
       {" "}
       <nav className="fixed top-0 left-0 w-full bg-black p-4 flex items-center justify-between z-10">
         <div className="flex space-x-4">
-          {["search", "library", "booklist"].map((v) => (
+          {tabs.map((t) => (
             <button
-              key={v}
-              onClick={() => setView(v)}
+              key={t.key}
+              onClick={() => setView(t.key)}
               className="px-3 py-1 bg-green-200 rounded hover:bg-yellow-400"
             >
-              {v.charAt(0).toUpperCase() + v.slice(1)}
+              {t.label}
             </button>
           ))}
         </div>
