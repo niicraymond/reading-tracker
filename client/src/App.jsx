@@ -3,31 +3,49 @@ import Login from "./components/Login";
 import Search from "./components/Search";
 import Library from "./components/Library";
 import Booklist from "./components/Booklist";
+import Register from "./components/Register";
 
 function App() {
   const [user, setUser] = useState(null);
   const [view, setView] = useState("search");
+  const [mode, setMode] = useState("login");
 
   const tabs = [
-    { key: "search",   label: "Search Books" },
-    { key: "library",  label: "My Library" },
+    { key: "search", label: "Search Books" },
+    { key: "library", label: "My Library" },
     { key: "booklist", label: "My Bookbag" },
   ];
 
   function handleLogin(userData) {
     setUser(userData);
   }
-
+  function handleRegister(userData) {
+    setUser(userData);
+  }
+  function toggleMode() {
+    setMode((m) => (m === "login" ? "register" : "login"));
+  }
   function handleLogout() {
     localStorage.removeItem("token");
     setUser(null);
+    setMode("login");
   }
 
   if (!user) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <h1>Log In</h1>
-        <Login onLogin={handleLogin} />
+        <div className="bg-white p-8 rounded-xl shadow-lg w-80 space-y-4">
+          {mode === "login"
+            ? <Login    onLogin={handleLogin} />
+            : <Register onRegister={handleRegister} />
+          }
+          <button
+            onClick={toggleMode}
+            className="w-full py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+          >
+            {mode === "login" ? "Sign Up" : "Back to Log In"}
+          </button>
+        </div>
       </div>
     );
   }
