@@ -18,7 +18,7 @@ export default function Login({ onLogin }) {
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
+    <div>
     <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm flex flex-col gap-4">
         {error && <div className="text-red-600 text-center">{error}</div>}
       <input

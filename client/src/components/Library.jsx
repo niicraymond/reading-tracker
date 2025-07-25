@@ -77,11 +77,11 @@ export default function Library() {
           <option value="pages-desc">Pages ↓</option>
         </select>
       </div>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+      <ul className="space-y-6 p-4">
         {sorted.map((book) => (
           <li
             key={book.id}
-            className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow"
+            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow flex flex-col"
           >
             <h2 className="font-semibold text-lg mb-1">{book.title}</h2>
             <p className="text-sm text-gray-600 mb-2">
@@ -91,7 +91,7 @@ export default function Library() {
               <span>Genre: {book.genre || "—"}</span>
               <span>Pages: {book.page_count || "—"}</span>
             </div>
-            <div className="mt-4 flex gap-2">
+            <div className="mt-auto flex gap-2">
               <button
                 onClick={() =>
                   api

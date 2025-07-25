@@ -37,7 +37,7 @@ export default function Search() {
     <div>
       <form
         onSubmit={handleSearch}
-        className="flex items-center justify-between w-full mb-4"
+        className="flex items-center justify-between w-full"
       >
         <input
           className="flex-1 p-2 border border-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -47,7 +47,7 @@ export default function Search() {
         />
         <button
           type="submit"
-          className="px-3 py-1 bg-yellow-300 rounded hover:bg-yellow-400"
+          className="px-10 py-1 m-3 bg-yellow-300 rounded hover:bg-yellow-400"
         >
           Search
         </button>
