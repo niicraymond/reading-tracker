@@ -4,6 +4,7 @@ import api from "../api";
 export default function Booklist() {
   const [list, setList] = useState([]);
   const [error, setError] = useState("");
+  const [sortBy, setSortBy] = useState("")
 
   async function handleRemoveFromBooklist(bookId) {
     try {
@@ -43,14 +44,46 @@ export default function Booklist() {
   if (error) {
     return <div>{error}</div>;
   }
+  const sorted = [...list].sort((a, b) => {
+    switch (sortBy) {
+      case "title":   return a.title.localeCompare(b.title);
+      case "author":  return (a.authors[0]||"").localeCompare(b.authors[0]||"");
+      case "genre":   return (a.genre||"").localeCompare(b.genre||"");
+      case "pages-asc":  return (a.page_count||0) - (b.page_count||0);
+      case "pages-desc": return (b.page_count||0) - (a.page_count||0);
+      case "status":  return (a.status_tag||"").localeCompare(b.status_tag||"");
+      case "rating-asc":  return (a.rating||0) - (b.rating||0);
+      case "rating-desc": return (b.rating||0) - (a.rating||0);
+      default: return 0;
+    }
+  });
 
-  if (list.length === 0) {
+  if (sorted.length === 0) {
     return <div>Your bookbag is empty.</div>;
   }
 
   return (
+    <div>
+      <div className="p-4">
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="p-2 border rounded w-full max-w-xs"
+        >
+          <option value="">Sort by…</option>
+          <option value="title">Title A→Z</option>
+          <option value="author">Author A→Z</option>
+          <option value="genre">Genre A→Z</option>
+          <option value="pages-asc">Pages ↑</option>
+          <option value="pages-desc">Pages ↓</option>
+          <option value="status">Status A→Z</option>
+          <option value="rating-asc">Rating ↑</option>
+          <option value="rating-desc">Rating ↓</option>
+        </select>
+      </div>
+
     <ul className="divide-y divide-gray-300 p-4">
-      {list.map((b) => (
+      {sorted.map((b) => (
         <li key={b.id} className="flex items-center justify-between py-3">
           <div className="font-medium">{b.title}</div>
           <div className="text-sm text-gray-600">{b.authors.join(", ")}</div>
@@ -89,5 +122,6 @@ export default function Booklist() {
         </li>
       ))}
     </ul>
+    </div>
   );
 }
