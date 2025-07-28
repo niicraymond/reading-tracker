@@ -67,8 +67,6 @@ async function updateBookList(req, res) {
 
   await upsertBookListEntry(userId, bookId, status_tag, rating);
 
-  await removeBookFromLibrary(userId, bookId);
-
   res
     .status(200)
     .json({ message: "Book moved to Booklist and removed from Library" });
