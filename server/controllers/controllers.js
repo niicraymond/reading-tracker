@@ -7,12 +7,12 @@ const {
   removeBookFromLibrary,
   removeBookFromBooklist,
   createUser,
-  getUserByEmail
+  getUserByEmail,
+  addToUserLibrary
 } = require("../models/models");
 
 const bcrypt = require("bcrypt");
-const jwt    = require("jsonwebtoken");
-
+const jwt = require("jsonwebtoken");
 
 async function fetchLibrary(req, res) {
   const userId = req.userId;
@@ -67,6 +67,8 @@ async function updateBookList(req, res) {
 
   await upsertBookListEntry(userId, bookId, status_tag, rating);
 
+  await removeBookFromLibrary(userId, bookId);
+
   res
     .status(200)
     .json({ message: "Book moved to Booklist and removed from Library" });
@@ -76,29 +78,31 @@ async function removeFromBooklist(req, res) {
   const userId = req.userId;
   const { bookId } = req.params;
   await removeBookFromBooklist(userId, bookId);
-  res.json({ message: "Book removed from booklist" });
+  await addToUserLibrary(userId, bookId);
+  res.json({ message: 'Book returned to library' });
 }
 
 async function removeFromLibrary(req, res) {
   const userId = req.userId;
   const { bookId } = req.params;
   await removeBookFromLibrary(userId, bookId);
-  res.json({ message: "Book removed" });
+  await addToUserLibrary(userId, bookId);
+  res.json({ message: "Book returned to library" });
 }
 
 async function register(req, res) {
   const { name, email, password } = req.body;
   if (!name || !email || !password)
-    return res.status(400).json({ error: 'All fields required' });
+    return res.status(400).json({ error: "All fields required" });
 
   if (await getUserByEmail(email))
-    return res.status(409).json({ error: 'Email already registered' });
+    return res.status(409).json({ error: "Email already registered" });
 
   const hash = await bcrypt.hash(password, 10);
   const user = await createUser(name, email, hash);
 
   const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-    expiresIn: '2h',
+    expiresIn: "2h",
   });
   res.status(201).json({ token, user });
 }
@@ -111,5 +115,5 @@ module.exports = {
   updateBookList,
   removeFromLibrary,
   removeFromBooklist,
-  register
+  register,
 };

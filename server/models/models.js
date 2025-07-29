@@ -91,6 +91,15 @@ async function removeBookFromLibrary(userId, bookId) {
   );
 }
 
+async function addToUserLibrary(userId, bookId) {
+  await pool.query(
+    `INSERT INTO user_library (user_id, book_id)
+         VALUES ($1, $2)
+         ON CONFLICT DO NOTHING`,
+    [userId, bookId]
+  );
+}
+
 async function createUser(name, email, passwordHash) {
   const { rows } = await pool.query(
     `INSERT INTO users (name, email, password)
@@ -102,13 +111,11 @@ async function createUser(name, email, passwordHash) {
 }
 
 async function getUserByEmail(email) {
-    const { rows } = await pool.query(
-     `SELECT * FROM users WHERE email = $1`,
-      [email]
-    );
-    return rows[0];
-  }
-
+  const { rows } = await pool.query(`SELECT * FROM users WHERE email = $1`, [
+    email,
+  ]);
+  return rows[0];
+}
 
 module.exports = {
   getLibrary,
@@ -119,5 +126,6 @@ module.exports = {
   removeBookFromLibrary,
   removeBookFromBooklist,
   createUser,
-  getUserByEmail
+  getUserByEmail,
+  addToUserLibrary
 };
