@@ -1,6 +1,6 @@
 const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env";
 require("dotenv").config({ path: envFile });
-
+const pool = require("./connection");
 const login = require("./controllers/authController");
 const authenticate = require("./middleware/auth");
 const {
@@ -30,7 +30,15 @@ app.post("/api/booklist", authenticate, updateBookList);
 app.delete("/api/library/:bookId", authenticate, removeFromLibrary);
 app.delete("/api/booklist/:bookId", authenticate, removeFromBooklist);
 app.post("/api/auth/register", register);
-app.get("/healthz", (_req, res) => res.status(200).send("OK"));
+app.get("/healthz", async (_req, res) => {
+  try {
+    await pool.query("SELECT 1"); // touches Supabase
+    return res.status(200).send("OK");
+  } catch (err) {
+    console.error("healthz DB check failed:", err.message);
+    return res.status(500).send("DB error");
+  }
+});
 
 
 if (require.main === module) {
