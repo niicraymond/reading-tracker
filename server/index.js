@@ -30,6 +30,8 @@ app.post("/api/booklist", authenticate, updateBookList);
 app.delete("/api/library/:bookId", authenticate, removeFromLibrary);
 app.delete("/api/booklist/:bookId", authenticate, removeFromBooklist);
 app.post("/api/auth/register", register);
+app.get("/healthz", (_req, res) => res.status(200).send("OK"));
+
 
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
